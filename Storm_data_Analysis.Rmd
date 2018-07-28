@@ -4,7 +4,7 @@ author: "Chandan Mahodi"
 date: "21 July 2018"
 output: html_document
 ---
-##Synopsis:
+## Synopsis:
 This document is an analysis of the NOAA Storm Database. This database tracks characteristics of major storms and weather events in the United States, including when and where they occur, as well as estimates of any fatalities, injuries, and property damage.
 
 Storms and other severe weather events can cause both public health and economic problems for communities and municipalities. Many severe events can result in fatalities, injuries, and property damage, and preventing such outcomes to the extent possible is a key concern.
@@ -15,7 +15,7 @@ This report can be helpful for preparing for severe weather events and simultane
 knitr::opts_chunk$set(echo = TRUE,cache=TRUE)
 ```
 
-##Data Processing:
+## Data Processing:
 
 ```{r Data_Processing,cache=TRUE}
 setwd("C:/Users/user/Desktop/Data Analytics Stuff/Coursera/Reproducible research/Project2")
@@ -23,7 +23,7 @@ stormdata<-read.csv("repdata%2Fdata%2FStormData.csv.bz2",header=TRUE)
 str(stormdata)
 ```
 
-##1.Across the United States, which types of events are most harmful with respect to population health?
+## 1.Across the United States, which types of events are most harmful with respect to population health?
 
 Selecting data pertaining Population Health
 
@@ -47,13 +47,13 @@ barplot(SortInj[1:10],las=2,cex.names = 0.5)
 ```
 
 
-##Result:
+## Result:
 
 The events which are most harmful with respect to  population health are as follows: 
 ```{r}
 unique(names(SortInj[1:10]),names(SortFat[1:10]))
 ```
-##2.Across the United States, which types of events have the greatest economic consequences?
+## 2.Across the United States, which types of events have the greatest economic consequences?
 
 
 Selecting data pertaining Economical Damage
@@ -83,7 +83,7 @@ barplot(sortedCD[1:10],las=2,cex.names = 0.5,cex.axis = 0.5,ylab="Economical Dam
 ```
 
 
-##Result:
+## Result:
 The top 10 events which have greatst economic consequences are as follows: 
 ```{r}
 names(sortedTD[1:10])
