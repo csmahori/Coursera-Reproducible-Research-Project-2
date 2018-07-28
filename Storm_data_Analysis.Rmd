@@ -1,0 +1,90 @@
+---
+title: "NOAA Storm Data Analysis"
+author: "Chandan Mahodi"
+date: "21 July 2018"
+output: html_document
+---
+##Synopsis:
+This document is an analysis of the NOAA Storm Database. This database tracks characteristics of major storms and weather events in the United States, including when and where they occur, as well as estimates of any fatalities, injuries, and property damage.
+
+Storms and other severe weather events can cause both public health and economic problems for communities and municipalities. Many severe events can result in fatalities, injuries, and property damage, and preventing such outcomes to the extent possible is a key concern.
+
+This report can be helpful for preparing for severe weather events and simultaneously will help to prioritize resources for different types of events.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,cache=TRUE)
+```
+
+##Data Processing:
+
+```{r Data_Processing,cache=TRUE}
+setwd("C:/Users/user/Desktop/Data Analytics Stuff/Coursera/Reproducible research/Project2")
+stormdata<-read.csv("repdata%2Fdata%2FStormData.csv.bz2",header=TRUE)
+str(stormdata)
+```
+
+##1.Across the United States, which types of events are most harmful with respect to population health?
+
+Selecting data pertaining Population Health
+
+```{r Filtered_data}
+dataFat<-tapply(stormdata$FATALITIES,stormdata$EVTYPE,sum)
+dataInj<-tapply(stormdata$INJURIES,stormdata$EVTYPE,sum)
+```
+
+Sorting Fatalities and Injuries 
+```{r sort_events}
+SortFat<-sort(dataFat,decreasing=TRUE)
+SortInj<-sort(dataInj,decreasing=TRUE)
+```
+
+Most Harmful Types of Events
+```{r major_events}
+library(graphics)
+par(mfrow=c(1,2))
+barplot(SortFat[1:10],las=2,cex.names = 0.5)
+barplot(SortInj[1:10],las=2,cex.names = 0.5)
+```
+
+
+##Result:
+
+The events which are most harmful with respect to  population health are as follows: 
+```{r}
+unique(names(SortInj[1:10]),names(SortFat[1:10]))
+```
+##2.Across the United States, which types of events have the greatest economic consequences?
+
+
+Selecting data pertaining Economical Damage
+
+```{r Filtered_data_for_eco_dmg}
+library(dplyr)
+newstormdata<-subset(stormdata,PROPDMGEXP=='M'|CROPDMGEXP=='M',select = c(EVTYPE,PROPDMG,CROPDMG))
+newstormdata<-mutate(newstormdata,TTLDMG=PROPDMG+CROPDMG)
+dataPD<-tapply(newstormdata$PROPDMG,newstormdata$EVTYPE,sum)
+dataCD<-tapply(newstormdata$CROPDMG,newstormdata$EVTYPE,sum)
+dataTD<-tapply(newstormdata$TTLDMG,newstormdata$EVTYPE,sum)
+```
+
+Sorting Damages
+```{r sort_events_eco_dmg}
+sortedPD<-sort(dataPD,decreasing=TRUE)
+sortedCD<-sort(dataCD,decreasing=TRUE)
+sortedTD<-sort(dataTD,decreasing=TRUE)
+```
+
+Most Harmful Types of Events as per Economical Damage
+```{r major_events_eco_dmg}
+library(graphics)
+par(mfrow=c(1,2))
+barplot(sortedPD[1:10],las=2,cex.names = 0.5,cex.axis = 0.5,ylab="Economical Damage in Millions")
+barplot(sortedCD[1:10],las=2,cex.names = 0.5,cex.axis = 0.5,ylab="Economical Damage in Millions")
+```
+
+
+##Result:
+The top 10 events which have greatst economic consequences are as follows: 
+```{r}
+names(sortedTD[1:10])
+```
